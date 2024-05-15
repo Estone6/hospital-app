@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import logo from "../../assets/images/logo.png";
 import userImg from "../../assets/images/avatar-icon.png";
 import { NavLink, Link } from "react-router-dom";
@@ -27,28 +27,28 @@ const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
 
-  const handleScroll = useCallback(() => {
-    if (headerRef.current) {
-      if (window.scrollY > 80) {
+  const handleStickyHeader = () => {
+    window.addEventListener("scroll", () => {
+      if (
+        document.body.scrollTop > 80 ||
+        document.documentElement.scrollTop > 80
+      ) {
         headerRef.current.classList.add("sticky_header");
       } else {
-        headerRef.current.classList.remove("sticky_header");
+        headerRef.current.classList.add("sticky_header");
       }
-    }
-  }, []);
+    });
+  };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
+    handleStickyHeader();
 
-  const toggleMenu = () => {
-    if (menuRef.current) {
-      menuRef.current.classList.toggle("show_menu");
-    }
-  };
+    return () => {
+      window.removeEventListener("scroll", handleStickyHeader);
+    };
+  }, []);
+
+  const toggleMenu = () => menuRef.current.classList.toggle("show_menu");
 
   return (
     <header
@@ -66,6 +66,7 @@ const Header = () => {
           <div
             className="navigation"
             ref={menuRef}
+            onClick={toggleMenu}
           >
             <ul className="menu flex items-center gap-[2.7rem]">
               {navLinks.map((item, index) => (
@@ -74,8 +75,8 @@ const Header = () => {
                     to={item.path}
                     className={(navClass) =>
                       navClass.isActive
-                        ? "text-primaryColor text-[16px] leading-7 font-[600]"
-                        : "text-textColor text-[16px] leading-7 font-[600] hover:text-primaryColor"
+                        ? "text-primaryColor text=[16px] leading-7 font-[600]"
+                        : "text-textColor text=[16px] leading-7 font-[600] hover:text-primaryColor"
                     }
                   >
                     {item.display}
@@ -91,7 +92,7 @@ const Header = () => {
                   <img
                     className="w-full rounded-full"
                     src={userImg}
-                    alt="User avatar"
+                    alt="Avatar user"
                   />
                 </figure>
               </Link>
@@ -101,6 +102,7 @@ const Header = () => {
                 Login
               </button>
             </Link>
+
             <span
               className="md:hidden"
               onClick={toggleMenu}
