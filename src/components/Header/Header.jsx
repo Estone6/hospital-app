@@ -28,24 +28,25 @@ const Header = () => {
   const menuRef = useRef(null);
   const { user, role, token } = useContext(AuthContext);
 
-  const handleStickyHeader = () => {
-    window.addEventListener("scroll", () => {
+  const handleScroll = () => {
+    if (headerRef.current) {
+      // Check if the ref is attached to an element
       if (
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
       ) {
         headerRef.current.classList.add("sticky_header");
       } else {
-        headerRef.current.classList.add("sticky_header");
+        headerRef.current.classList.remove("sticky_header");
       }
-    });
+    }
   };
 
   useEffect(() => {
-    handleStickyHeader();
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleStickyHeader);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import MyBookings from "./MyBookings";
 import ProfileSettings from "./ProfileSettings";
-import useFetchData from "../../hooks/useFetchData";
+import useGetProfile from "../../hooks/useFetchData";
 import { BASE_URL } from "../../config";
 import Loading from "../../components/Loader/Loading";
 import Error from "../../components/Error/Error";
@@ -15,7 +15,7 @@ const UserAccount = () => {
     data: userData,
     loading,
     error,
-  } = useFetchData(`${BASE_URL}/users/profile/me`);
+  } = useGetProfile(`${BASE_URL}/users/profile/me`);
 
   console.log(userData, loading, error);
 
